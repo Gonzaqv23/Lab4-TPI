@@ -8,5 +8,4 @@ class Reservas(BaseModel):
     usuario_id: int
     paquete_id: int
     fecha: date
-    cant_personas: int
-
+    cantidad_personas: int = Field(ge=0)

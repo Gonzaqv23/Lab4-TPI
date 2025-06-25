@@ -19,8 +19,8 @@ class PaquetesService():
         return result
 
     def create_paquete(self, Paquete: Paquetes):
-        new_categoria = PaquetesModel(**Paquete.model_dump())
-        self.db.add(new_categoria)
+        new_paquete = PaquetesModel(**Paquete.model_dump())
+        self.db.add(new_paquete)
         self.db.commit()
         return
     

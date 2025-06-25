@@ -29,9 +29,9 @@ def get_paquete(id: int = Path(ge=1, le=2000), db = Depends(get_database_session
 
 
 @paquetes_router.post('/paquetes', tags=['Paquetes'], response_model=dict, status_code=201)
-def create_paquete(Paquete: Paquetes,  db = Depends(get_database_session)) -> dict:
+def create_paquete(paquete: Paquetes,  db = Depends(get_database_session)) -> dict:
     #db = Session()
-    PaquetesService(db).create_paquete(Paquete)
+    PaquetesService(db).create_paquete(paquete)
     return JSONResponse(status_code=201, content={"message": "Se registro el paquete"})
 
 

@@ -42,7 +42,7 @@ def update_destino(id: int, destino: Destinos, db = Depends(get_database_session
     if not result:
         return JSONResponse(status_code=404, content={'message': "No encontrado"})
     
-    DestinosService(db).update_producto(id, destino)
+    DestinosService(db).update_destino(id, destino)
     return JSONResponse(status_code=200, content={"message": "Se ha modificado el destino"})
 
 
@@ -52,5 +52,5 @@ def delete_destino(id: int, db = Depends(get_database_session))-> dict:
     result: DestinosModel = db.query(DestinosModel).filter(DestinosModel.id == id).first()
     if not result:
         return JSONResponse(status_code=404, content={"message": "No se encontró"})
-    DestinosService(db).delete_producto(id)
+    DestinosService(db).delete_destino(id)
     return JSONResponse(status_code=200, content={"message": "Se ha eliminado el destino"})

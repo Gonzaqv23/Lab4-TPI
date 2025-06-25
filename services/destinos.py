@@ -23,8 +23,8 @@ class DestinosService():
         return result
 
     def create_destino(self, Destino: Destinos):
-        new_producto = DestinosModel(**Destino.model_dump(exclude={'destino'}) )
-        self.db.add(new_producto)
+        new_destino = DestinosModel(**Destino.model_dump(exclude={'destino'}) )
+        self.db.add(new_destino)
         self.db.commit()
         return
     

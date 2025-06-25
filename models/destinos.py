@@ -9,5 +9,5 @@ class Destinos(Base):
 
     id = Column(Integer, primary_key = True)
     nombre = Column(String(20))
-    descripcion = Column(String(100))
+    descripcion = Column(String(150))
     pais = Column(String(50))

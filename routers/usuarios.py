@@ -72,13 +72,13 @@ def create_usuarios(usuario: Usuarios, db = Depends(get_database_session)) -> di
 
 
 @usuarios_router.put('/usuarios/{id}', tags=['Usuarios'], response_model=dict, status_code=200)
-def update_usuarios(id: int, Usuarios: Usuarios, db = Depends(get_database_session))-> dict:
+def update_usuarios(id: int, usuarios: Usuarios, db = Depends(get_database_session))-> dict:
     #db = Session()
     result = UsuariosService(db).get_usuario_id(id)
     if not result:
         return JSONResponse(status_code=404, content={'message': "No se encontro el usuario"})
-    Usuarios.password = get_password_hash(Usuarios.password)
-    UsuariosService(db).update_usuarios(id, Usuarios)
+    usuarios.password = get_password_hash(usuarios.password)
+    UsuariosService(db).update_usuarios(id, usuarios)
     return JSONResponse(status_code=200, content={"message": "Se ha modificado el usuario"})
 
 

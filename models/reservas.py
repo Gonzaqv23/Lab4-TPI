@@ -7,6 +7,6 @@ class Reservas(Base):
 
     id = Column(Integer, primary_key=True)
     usuario_id = Column(Integer, ForeignKey('usuarios.id'), nullable=False)
-    paquete_id = Column(Integer, ForeignKey('paquete.id'), nullable=False)
+    paquete_id = Column(Integer, ForeignKey('paquetes.id'), nullable=False)
     fecha_reserva = Column(Date)
-    cant_personas = Column(Integer)
+    cantidad_personas = Column(Integer)

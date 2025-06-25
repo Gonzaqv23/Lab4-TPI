@@ -15,8 +15,8 @@ class ReservasService():
         return result
     
     def create_reserva(self, Reserva: Reservas):
-        new_producto = ReservasModel(**Reserva.model_dump(exclude={'emailUsuario', 'nombreProducto'})  )
-        self.db.add(new_producto)
+        new_reserva = ReservasModel(**Reserva.model_dump(exclude={'emailUsuario', 'nombreProducto'})  )
+        self.db.add(new_reserva)
         self.db.commit()
         return
     
@@ -25,7 +25,7 @@ class ReservasService():
         reserva.usuario_id = data.usuario_id
         reserva.paquete_id = data.paquete_id
         reserva.fecha = data.fecha
-        reserva.cant_pers = data.cant_personas
+        reserva.cant_personas = data.cant_personas
 
         self.db.commit()
         return
@@ -34,4 +34,3 @@ class ReservasService():
        self.db.query(ReservasModel).filter(ReservasModel.id == id).delete()
        self.db.commit()
        return
-
