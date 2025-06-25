@@ -1,0 +1,10 @@
+from pydantic import BaseModel, Field
+from typing import Optional, List
+
+
+class Destinos(BaseModel):
+    id: Optional[int] = None
+    nombre: str = Field(min_length=5, max_length=50)
+    descripcion: str = Field(max_length=100)
+    pais: str = Field(max_length=100)
+
