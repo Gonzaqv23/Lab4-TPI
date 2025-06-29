@@ -20,7 +20,7 @@ def get_destinos(db = Depends(get_database_session)) -> List[Destinos]:
 
 
 @destinos_router.get('/destinos/{id}', tags=['Destinos'], response_model=Destinos)
-def get_destinos(id: int = Path(ge=1, le=2000), db = Depends(get_database_session)) -> Destinos:
+def get_destinoxId(id: int = Path(ge=1, le=2000), db = Depends(get_database_session)) -> Destinos:
     #db = Session()
     result = DestinosService(db).get_destino_id(id)
     if not result:

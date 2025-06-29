@@ -13,14 +13,14 @@ from schemas.paquetes import Paquetes
 paquetes_router = APIRouter()
 
 @paquetes_router.get('/paquetes', tags=['Paquetes'], response_model=List[Paquetes], status_code=200 , dependencies=[Depends(JWTBearer())])
-def get_paquete(db = Depends(get_database_session) ) -> List[Paquetes]:
+def get_paquetes(db=Depends(get_database_session)) -> List[Paquetes]:
     #db = Session()
     result = PaquetesService(db).get_paquetes()
     return JSONResponse(status_code=200, content=jsonable_encoder(result))
 
 
 @paquetes_router.get('/paquetes/{id}', tags=['Paquetes'], response_model=Paquetes)
-def get_paquete(id: int = Path(ge=1, le=2000), db = Depends(get_database_session)) -> Paquetes:
+def get_paquetexId(id: int = Path(ge=1, le=2000), db=Depends(get_database_session)) -> Paquetes:
     #db = Session()
     result = PaquetesService(db).get_paquete_id(id)
     if not result:
@@ -29,7 +29,7 @@ def get_paquete(id: int = Path(ge=1, le=2000), db = Depends(get_database_session
 
 
 @paquetes_router.post('/paquetes', tags=['Paquetes'], response_model=dict, status_code=201)
-def create_paquete(paquete: Paquetes,  db = Depends(get_database_session)) -> dict:
+def create_paquete(paquete: Paquetes,  db=Depends(get_database_session)) -> dict:
     #db = Session()
     PaquetesService(db).create_paquete(paquete)
     return JSONResponse(status_code=201, content={"message": "Se registro el paquete"})

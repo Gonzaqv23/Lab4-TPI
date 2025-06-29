@@ -20,7 +20,7 @@ def get_reservas(db = Depends(get_database_session)) -> List[Reservas]:
 
 
 @reservas_router.get('/reservas/{id}', tags=['Reservas'], response_model=Reservas)
-def get_reserva(id: int = Path(ge=1, le=2000), db = Depends(get_database_session)) -> Reservas:
+def get_reservaxId(id: int = Path(ge=1, le=2000), db=Depends(get_database_session)) -> Reservas:
     #db = Session()
     result = ReservasService(db).get_reserva_id(id)
     if not result:
@@ -29,14 +29,14 @@ def get_reserva(id: int = Path(ge=1, le=2000), db = Depends(get_database_session
 
 
 @reservas_router.post('/reservas', tags=['Reservas'], response_model=dict, status_code=201)
-def create_reservas(reserva: Reservas, db = Depends(get_database_session)) -> dict:
+def create_reserva(reserva: Reservas, db = Depends(get_database_session)) -> dict:
     #db = Session()
     ReservasService(db).create_reserva(reserva)
     return JSONResponse(status_code=201, content={"message": "Se registro la reserva"})
 
 
 @reservas_router.put('/reservas/{id}', tags=['Reservas'], response_model=dict, status_code=200)
-def update_reservas(id: int, reservas: Reservas, db = Depends(get_database_session))-> dict:
+def update_reserva(id: int, reservas: Reservas, db=Depends(get_database_session))-> dict:
     #db = Session()
     result = ReservasService(db).get_reserva_id(id)
     if not result:

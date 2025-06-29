@@ -23,6 +23,7 @@ class UsuariosService():
     def update_usuarios(self, id: int, data: Usuarios):
         usuario = self.db.query(UsuariosModel).filter(UsuariosModel.id == id).first()
         usuario.nombre = data.nombre
+        usuario.apellido = data.apellido
         usuario.correo = data.correo
         usuario.password = data.password
         usuario.rol = data.rol

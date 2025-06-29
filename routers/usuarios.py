@@ -8,10 +8,9 @@ from models.usuarios import Usuarios as UsuarioModel
 from fastapi.encoders import jsonable_encoder
 from middlewares.jwt_bearer import JWTBearer
 from services.usuarios import UsuariosService
-from schemas.usuarios import Usuarios
 from passlib.context import CryptContext
 from utils.jwt_manager import create_token
-from schemas.usuarios import User, UsuarioBase
+from schemas.usuarios import User, UsuarioBase, Usuarios, UsuarioPublico
 
 usuarios_router = APIRouter()
 
@@ -37,10 +36,10 @@ def get_user(users:list, email: str):
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)  
 
-@usuarios_router.post('/login', tags=['auth'])
-def login(user: User, db = Depends(get_database_session)):
+@usuarios_router.post('/login', tags=['Autenticacion'])
+def login(user: User, db=Depends(get_database_session)):
     #db = Session()
-    usuariosDb:UsuarioModel= UsuariosService(db).get_usuarios()
+    usuariosDb:UsuarioModel = UsuariosService(db).get_usuarios()
 
     usuario= authenticate_user(usuariosDb, user.email, user.password)
     if not usuario:
@@ -49,23 +48,25 @@ def login(user: User, db = Depends(get_database_session)):
         token: str = create_token(user.model_dump())
         return JSONResponse(status_code=200, content={'accesoOk': True,'token':token, 'usuario': jsonable_encoder(usuario) })
 
-@usuarios_router.get('/usuarios', tags=['Usuarios'], status_code=200, dependencies=[Depends(JWTBearer())])
-def get_usuarios(db = Depends(get_database_session)):
-    #db = Session()
-    result = UsuariosService(db).get_usuarios()
-    return JSONResponse(status_code=200, content=jsonable_encoder(result))
 
-@usuarios_router.get('/usuarios/{id}', tags=['Usuarios'], response_model=UsuarioBase)
-def get_usuario(id: int = Path(ge=1, le=2000), db = Depends(get_database_session)) :
-    #db = Session()
+@usuarios_router.get("/usuarios", tags=["Usuarios"], status_code=status.HTTP_200_OK,
+                     response_model=List[UsuarioPublico], dependencies=[Depends(JWTBearer())])
+def get_usuarios(db=Depends(get_database_session)):
+    result = UsuariosService(db).get_usuarios()
+    return result
+
+
+@usuarios_router.get('/usuarios/{id}', tags=['Usuarios'], response_model=UsuarioPublico,
+                     status_code=status.HTTP_200_OK, dependencies=[Depends(JWTBearer())])
+def get_usuarioxId(id: int = Path(ge=1, le=2000), db=Depends(get_database_session)):
     result = UsuariosService(db).get_usuario_id(id)
     if not result:
-        return JSONResponse(status_code=404, content={'message': "No encontrado"})
-    return JSONResponse(status_code=200, content=jsonable_encoder(result))
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Usuario no encontrado")
+    return result
 
 @usuarios_router.post('/usuarios', tags=['Usuarios'], response_model=dict, status_code=201)
-def create_usuarios(usuario: Usuarios, db = Depends(get_database_session)) -> dict:
-    usuario.password =  get_password_hash(usuario.password)
+def create_usuarios(usuario: Usuarios, db=Depends(get_database_session)) -> dict:
+    usuario.password = get_password_hash(usuario.password)
     #db = Session()
     UsuariosService(db).create_usuarios(usuario)
     return JSONResponse(status_code=201, content={"message": "Se ha registrado el usuario"})
