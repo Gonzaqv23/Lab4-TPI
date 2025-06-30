@@ -7,6 +7,7 @@ from routers.destinos import destinos_router
 from routers.usuarios import usuarios_router
 from routers.paquetes import paquetes_router
 from routers.reservas import reservas_router
+from routers.dashboard import dashboard_router
 from fastapi.staticfiles import StaticFiles
 
 
@@ -28,6 +29,7 @@ app.include_router(usuarios_router)
 app.include_router(destinos_router)
 app.include_router(paquetes_router)
 app.include_router(reservas_router)
+app.include_router(dashboard_router)
 
 Base.metadata.create_all(bind=engine)
 

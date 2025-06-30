@@ -11,6 +11,8 @@ from services.usuarios import UsuariosService
 from passlib.context import CryptContext
 from utils.jwt_manager import create_token
 from schemas.usuarios import User, UsuarioBase, Usuarios, UsuarioPublico
+from schemas.reservas import Reservas
+from services.reservas import ReservasService
 
 usuarios_router = APIRouter()
 
@@ -63,6 +65,18 @@ def get_usuarioxId(id: int = Path(ge=1, le=2000), db=Depends(get_database_sessio
     if not result:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Usuario no encontrado")
     return result
+
+# 4- Reservas Activas
+@usuarios_router.get("/usuarios/{usuario_id}/reservas/activas", tags=["Reservas"], response_model=List[Reservas],
+                     status_code=status.HTTP_200_OK, dependencies=[Depends(JWTBearer())])
+def get_reservas_activas_por_usuario(usuario_id: int, db=Depends(get_database_session)):
+    return ReservasService(db).get_reservas_activas_por_usuario(usuario_id)
+
+# 5- Historial de Viajes por usuarios
+@usuarios_router.get("/usuarios/{usuario_id}/historial", tags=["Reservas"], response_model=List[Reservas],
+                     dependencies=[Depends(JWTBearer())])
+def historial_de_viajes(usuario_id: int, db=Depends(get_database_session)):
+    return ReservasService(db).get_historial_de_viajes(usuario_id)
 
 @usuarios_router.post('/usuarios', tags=['Usuarios'], response_model=dict, status_code=201)
 def create_usuarios(usuario: Usuarios, db=Depends(get_database_session)) -> dict:
