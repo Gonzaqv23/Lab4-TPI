@@ -16,14 +16,12 @@ app.version = "0.0.1"
 
 app.add_middleware(ErrorHandler)
 
-## Acá con los CORS (Cross-Origin Resource Sharing)
-## defino todos los origenes que van a poder utitlizar/consultar el backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], ##habilito el back para cualquier dominio que quiera consultar
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],##habilito todos los métodos HTTP( GET, POST, PUT, HEAD, OPTION, etc)
-    allow_headers=["*"],##habilito todos los headers que se puedan enviar desde un navegador.
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(usuarios_router)
@@ -37,6 +35,6 @@ Base.metadata.create_all(bind=engine)
 # app.mount("/", StaticFiles(directory="frontend", html=True ), name="frontend")
 
 
-# @app.get('/', tags=['home'])
-# def message():
-#     return HTMLResponse('<h1>Hello world</h1>')
+@app.get('/', tags=['home'])
+def message():
+    return HTMLResponse('<h1>Agencia de Viajes</h1>')

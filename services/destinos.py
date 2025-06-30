@@ -1,14 +1,20 @@
 from models.destinos import Destinos as DestinosModel
 from schemas.destinos import Destinos
+from typing import Optional
 
 class DestinosService():
     
     def __init__(self, db) -> None:
         self.db = db
 
-    def get_destinos(self):
-        result = self.db.query(DestinosModel).all()
-        return result
+    def get_destinos(self, nombre: Optional[str] = None, pais: Optional[str] = None):
+        query = self.db.query(DestinosModel)
+        if nombre:
+            query = query.filter(DestinosModel.nombre.ilike(f"%{nombre}%"))
+        if pais:
+            query = query.filter(DestinosModel.pais.ilike(f"%{pais}%"))
+        return query.all()
+
 
     def get_destino_id(self, id):
         result = self.db.query(DestinosModel).filter(DestinosModel.id == id).first()
@@ -23,7 +29,7 @@ class DestinosService():
         return result
 
     def create_destino(self, Destino: Destinos):
-        new_destino = DestinosModel(**Destino.model_dump(exclude={'destino'}) )
+        new_destino = DestinosModel(**Destino.model_dump(exclude={"id"}))
         self.db.add(new_destino)
         self.db.commit()
         return

@@ -5,7 +5,6 @@ class User(BaseModel):
     email: str
     password: str
 class UsuarioBase(BaseModel):
-    id: Optional[int] = None
     nombre: str = Field(min_length=2, max_length=20)
     apellido: str = Field(min_length=2, max_length=20)
     correo: EmailStr

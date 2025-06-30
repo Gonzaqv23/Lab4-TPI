@@ -72,7 +72,7 @@ def create_usuarios(usuario: Usuarios, db=Depends(get_database_session)) -> dict
     return JSONResponse(status_code=201, content={"message": "Se ha registrado el usuario"})
 
 
-@usuarios_router.put('/usuarios/{id}', tags=['Usuarios'], response_model=dict, status_code=200)
+@usuarios_router.put('/usuarios/{id}', tags=['Usuarios'], response_model=dict, status_code=200, dependencies=[Depends(JWTBearer())])
 def update_usuarios(id: int, usuarios: Usuarios, db = Depends(get_database_session))-> dict:
     #db = Session()
     result = UsuariosService(db).get_usuario_id(id)
@@ -83,7 +83,7 @@ def update_usuarios(id: int, usuarios: Usuarios, db = Depends(get_database_sessi
     return JSONResponse(status_code=200, content={"message": "Se ha modificado el usuario"})
 
 
-@usuarios_router.delete('/usuarios/{id}', tags=['Usuarios'], response_model=dict, status_code=200)
+@usuarios_router.delete('/usuarios/{id}', tags=['Usuarios'], response_model=dict, status_code=200, dependencies=[Depends(JWTBearer())])
 def delete_usuarios(id: int, db = Depends(get_database_session))-> dict:
     #db = Session()
     result: UsuarioModel = db.query(UsuarioModel).filter(UsuarioModel.id == id).first()

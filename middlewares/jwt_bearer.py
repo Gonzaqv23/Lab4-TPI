@@ -25,7 +25,6 @@ class JWTBearer(HTTPBearer):
     def verify_jwt(self, token: str) -> bool:
         try:
             payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-            print("🧠 Payload:", payload)
             return True
         except JWTError as e:
             print("❌ JWT Error:", e)

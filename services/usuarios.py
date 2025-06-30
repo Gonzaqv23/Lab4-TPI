@@ -15,7 +15,7 @@ class UsuariosService():
         return result
 
     def create_usuarios(self, Usuario: Usuarios):
-        new_usuario = UsuariosModel(**Usuario.model_dump())
+        new_usuario = UsuariosModel(**Usuario.model_dump(exclude={"id"}))
         self.db.add(new_usuario)
         self.db.commit()
         return
