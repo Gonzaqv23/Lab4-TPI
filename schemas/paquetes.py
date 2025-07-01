@@ -10,3 +10,15 @@ class Paquetes(BaseModel):
     cupo: int = Field(ge=0)
     fecha_inicio: date
     fecha_fin: date
+
+class PaqueteRespuesta(BaseModel):
+    id: int
+    nombre: str
+    precio: int
+    cupo: int
+    fecha_inicio: date
+    fecha_fin: date
+    destino_id: int
+
+    class Config:
+        from_attributes = True

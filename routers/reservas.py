@@ -8,7 +8,9 @@ from models.reservas import Reservas as ReservasModel
 from fastapi.encoders import jsonable_encoder
 from middlewares.jwt_bearer import JWTBearer
 from services.reservas import ReservasService
-from schemas.reservas import Reservas
+from schemas.reservas import Reservas, ReservaCreate
+from jose import jwt, JWTError
+from utils.jwt_manager import SECRET_KEY, ALGORITHM
 
 reservas_router = APIRouter()
 
@@ -31,9 +33,10 @@ def get_reservaxId(id: int = Path(ge=1, le=2000), db=Depends(get_database_sessio
 
 @reservas_router.post('/reservas', tags=['Reservas'], response_model=dict,
                       status_code=status.HTTP_201_CREATED, dependencies=[Depends(JWTBearer())])
-def create_reserva(reserva: Reservas, db = Depends(get_database_session)) -> dict:
+def create_reserva(reserva: ReservaCreate, db = Depends(get_database_session)):
     ReservasService(db).create_reserva(reserva)
     return JSONResponse(status_code=status.HTTP_201_CREATED, content={"message": "Se registro la reserva"})
+
 
 
 @reservas_router.put('/reservas/{id}', tags=['Reservas'], response_model=dict, status_code=200, dependencies=[Depends(JWTBearer())])

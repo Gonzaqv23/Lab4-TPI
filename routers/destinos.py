@@ -7,12 +7,12 @@ from fastapi.encoders import jsonable_encoder
 from middlewares.jwt_bearer import JWTBearer
 from services.destinos import DestinosService
 from services.paquetes import PaquetesService
-from schemas.destinos import Destinos
-from schemas.paquetes import Paquetes
+from schemas.destinos import Destinos, DestinosOut
+from schemas.paquetes import Paquetes, PaqueteRespuesta
 
 destinos_router = APIRouter()
 
-@destinos_router.get('/destinos', tags=['Destinos'], response_model=List[Destinos],
+@destinos_router.get('/destinos', tags=['Destinos'], response_model=List[DestinosOut],
                      status_code=status.HTTP_200_OK, dependencies=[Depends(JWTBearer())])
 def get_destinos(
     nombre: Optional[str] = Query(None),
@@ -29,7 +29,7 @@ def get_destinoxId(id: int = Path(ge=1, le=2000), db = Depends(get_database_sess
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Destino no encontrado")
     return result
 
-@destinos_router.get("/destinos/{destino_id}/paquetes", tags=["Paquetes"], response_model=List[Paquetes],
+@destinos_router.get("/destinos/{destino_id}/paquetes", tags=["Paquetes"], response_model=List[PaqueteRespuesta],
                      status_code=status.HTTP_200_OK, dependencies=[Depends(JWTBearer())])
 def get_paquetes_por_destino(destino_id: int, db=Depends(get_database_session)):
     return PaquetesService(db).get_paquetes_por_destino(destino_id)
