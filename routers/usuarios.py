@@ -18,13 +18,13 @@ usuarios_router = APIRouter()
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def authenticate_user(users:dict, email: str, password: str)->UsuarioBase:
+def authenticate_user(users:dict, email: str, password: str)->UsuarioPublico:
     user = get_user(users, email)
     if not user:
         return False
     if not verify_password(password, user.password):
         return False
-    user = UsuarioBase.from_orm(user)
+    user = UsuarioPublico.from_orm(user)
     return user
 
 def get_password_hash(password):
@@ -40,7 +40,7 @@ def verify_password(plain_password, hashed_password):
 
 @usuarios_router.post('/login', tags=['Autenticacion'])
 def login(user: User, db=Depends(get_database_session)):
-    #db = Session()
+    
     usuariosDb:UsuarioModel = UsuariosService(db).get_usuarios()
 
     usuario= authenticate_user(usuariosDb, user.email, user.password)

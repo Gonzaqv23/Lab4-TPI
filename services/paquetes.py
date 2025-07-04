@@ -37,7 +37,6 @@ class PaquetesService():
     
     def update_paquete(self, id: int, data: Paquetes):
         paquete = self.db.query(PaquetesModel).filter(PaquetesModel.id == id).first()
-        paquete.destino_id = data.destino_id
         paquete.nombre = data.nombre
         paquete.precio = data.precio
         paquete.cupo = data.cupo

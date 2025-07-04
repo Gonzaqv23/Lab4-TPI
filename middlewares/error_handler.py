@@ -4,7 +4,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.responses import JSONResponse
 
 class ErrorHandler(BaseHTTPMiddleware):
-    async def dispatch(self, request, call_next):
+    async def dispatch(selfs, request, call_next):
         try:
             response = await call_next(request)
             return response

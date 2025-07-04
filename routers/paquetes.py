@@ -31,14 +31,12 @@ def get_paquetexId(id: int = Path(ge=1, le=2000), db=Depends(get_database_sessio
 
 @paquetes_router.post('/paquetes', tags=['Paquetes'], response_model=dict, status_code=201, dependencies=[Depends(JWTBearer())])
 def create_paquete(paquete: Paquetes,  db=Depends(get_database_session)) -> dict:
-    #db = Session()
     PaquetesService(db).create_paquete(paquete)
     return JSONResponse(status_code=201, content={"message": "Se registro el paquete"})
 
 
 @paquetes_router.put('/paquetes/{id}', tags=['Paquetes'], response_model=dict, status_code=200, dependencies=[Depends(JWTBearer())])
 def update_paquete(id: int, paquete: Paquetes,  db = Depends(get_database_session))-> dict:
-    #db = Session()
     result = PaquetesService(db).get_paquete_id(id)
     if not result:
         return JSONResponse(status_code=404, content={'message': "No encontrado"})
