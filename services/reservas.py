@@ -5,6 +5,7 @@ from schemas.reservas import Reservas
 from fastapi import HTTPException
 from datetime import date
 from sqlalchemy import func
+from sqlalchemy.orm import joinedload
 
 class ReservasService():
     
@@ -12,7 +13,11 @@ class ReservasService():
         self.db = db
 
     def get_reservas(self):
-        result = self.db.query(ReservasModel).all()
+        result = self.db.query(ReservasModel)\
+        .options(
+            joinedload(ReservasModel.usuario),
+            joinedload(ReservasModel.paquete)
+        ).all()
         return result
 
     def get_reserva_id(self, id):

@@ -25,3 +25,10 @@ class UsuarioPublico(BaseModel):
 
     class Config:
         from_attributes = True
+
+class UsuarioMini(BaseModel):
+    nombre: str
+    apellido: str
+
+    class Config:
+        from_attributes = True

@@ -1,5 +1,4 @@
 from pydantic import BaseModel, Field
-from typing import Optional, List
 from datetime import date
 
 
@@ -13,12 +12,18 @@ class Paquetes(BaseModel):
 
 class PaqueteRespuesta(BaseModel):
     id: int
+    destino_id: int
     nombre: str
-    precio: int
+    precio: float
     cupo: int
     fecha_inicio: date
     fecha_fin: date
-    destino_id: int
+    
+    class Config:
+        from_attributes = True
+
+class PaqueteMini(BaseModel):
+    nombre: str
 
     class Config:
         from_attributes = True

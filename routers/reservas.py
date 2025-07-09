@@ -8,9 +8,7 @@ from models.reservas import Reservas as ReservasModel
 from fastapi.encoders import jsonable_encoder
 from middlewares.jwt_bearer import JWTBearer
 from services.reservas import ReservasService
-from schemas.reservas import Reservas
-from jose import jwt, JWTError
-from utils.jwt_manager import SECRET_KEY, ALGORITHM
+from schemas.reservas import Reservas, ReservaRespuesta
 
 reservas_router = APIRouter()
 
@@ -21,6 +19,10 @@ def get_reservas(db = Depends(get_database_session)) -> List[Reservas]:
     if not result:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No hay reservas")
     return result
+
+@reservas_router.get("/reservas/detalladas", response_model=List[ReservaRespuesta])
+def get_reservas_completas(db=Depends(get_database_session)):
+    return ReservasService(db).get_reservas()
 
 
 @reservas_router.get('/reservas/{id}', tags=['Reservas'], response_model=Reservas, dependencies=[Depends(JWTBearer())])
